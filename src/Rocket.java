@@ -14,7 +14,7 @@ public class Rocket {
     private Integer x, y;
     private int speed;
     
-    private String path = "imgs/Rocket.png";
+    private String path = "imgs/rocket.png";
 
     @Override
     public String toString() {

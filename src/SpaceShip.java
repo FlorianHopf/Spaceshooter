@@ -16,7 +16,7 @@ public class SpaceShip {
 	private Integer currentLifes = lifes;
 	private boolean gameOver = false;
 	
-	private String path = "imgs/Ship.png";
+	private String path = "imgs/ship.png";
 	
 	private Image shipImage;
 	
