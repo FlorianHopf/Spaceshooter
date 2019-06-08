@@ -2,20 +2,27 @@ import java.util.Random;
 
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 public class Rocket {
 
-    private String Rocket = "➸";
+    private String rocket = "--->";
+    
+    private Image rocketImg;
+    
     private Integer x, y;
     private int speed;
+    
+    private String path = "imgs/Rocket.png";
 
     @Override
     public String toString() {
-        return "Rakete=" + Rocket + ", x=" + x + ", y=" + y + ", speed=" + speed;
+        return "Rakete=" + rocket + ", x=" + x + ", y=" + y + ", speed=" + speed;
     }
 
     public Rocket(Integer x, Integer y, int speed) {
+    	this.rocketImg = new Image(path);
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -54,11 +61,11 @@ public class Rocket {
     }
 
     public void paint(GraphicsContext gc) {
-        gc.fillText(this.Rocket, this.x, this.y);
+        gc.drawImage(rocketImg, x, y);
     }
 
     public Bounds getBounds() {
-		Rectangle r = new Rectangle(this.x, this.y, 5, 5);
+		Rectangle r = new Rectangle(this.x, this.y, rocketImg.getWidth(), rocketImg.getHeight());
 		return r.getBoundsInLocal();
 	}
 }

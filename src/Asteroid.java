@@ -2,8 +2,8 @@ import java.util.Random;
 
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 
 public class Asteroid {
 
@@ -11,6 +11,12 @@ public class Asteroid {
 	private Integer x, y = 0;
 	private int speed;
 	private boolean hitted = false;
+	private boolean exploding = false;
+	
+	private double width;
+	private double height;
+	
+	private Image asteroidImg = new Image("imgs/asteroid.png");
 	
 	/**
 	 * ctor
@@ -23,6 +29,10 @@ public class Asteroid {
 		this.speed = speed;
 	}
 	
+	public int getSpeed() {
+		return speed;
+	}
+	
 	public void move() {
 		this.x -= this.speed;
 	}
@@ -31,14 +41,16 @@ public class Asteroid {
 		return "Asteroid(" + this.x + "|" + this.y + "|" + this.speed + ")";
 	}
 	
-	
 	/**
 	 * Zeichnet 
 	 * @param gc
 	 */
 	public void paint(GraphicsContext gc) {
 		move();
-		gc.fillText(AsteroidString, x, y);
+		gc.drawImage(asteroidImg, this.x, this.y);
+		
+		width = asteroidImg.getWidth();
+        height = asteroidImg.getHeight();
 	}
 
 	public boolean isVisible() {
@@ -51,6 +63,11 @@ public class Asteroid {
 		this.x = width + rnd.nextInt(width);
 		this.y = rnd.nextInt(height);
 		this.speed = 1 + rnd.nextInt(4);
+		
+		hitted = false;
+		exploding = false;
+
+		asteroidImg = new Image("imgs/asteroid.png");
 	}
 
 	public Integer getX() {
@@ -74,11 +91,15 @@ public class Asteroid {
 	 * @return 
 	 */
 	public Bounds getBounds() {
-		Circle c = new Circle(this.x, this.y, 5);
+		Circle c = new Circle(this.x + width/2, this.y + height/2, 15);
 		return c.getBoundsInLocal();
 	}
 	
 	public void explodes() {
+		
+		asteroidImg = new Image("imgs/explosion.png");
+		hitted = true;
+		exploding = true;
 		
 	}
 	
@@ -88,6 +109,10 @@ public class Asteroid {
 	
 	public boolean hitted() {
 		return hitted;
+	}
+	
+	public boolean exploding() {
+		return exploding;
 	}
 }
 
