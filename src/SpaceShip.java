@@ -133,8 +133,6 @@ public class SpaceShip {
 		
 		currentLifes--;
 		
-		gc.drawImage(damageTaken, this.x, this.y);
-		
 		if(currentLifes < lifes) {
 			healthBar.set(currentLifes, emptyHeart);
 		}
