@@ -12,9 +12,11 @@ public class SpaceShip {
 	private Color farbe;
 	private String ShipString;
 	private Integer x, y = 0;
+	private Integer startX, startY = 0;
 	
-	private Integer lifes = 14;
+	private Integer lifes = 2;
 	private Integer currentLifes = lifes;
+	private boolean gameOver = false;
 	
 	private String path = "imgs/Ship.png";
 	
@@ -42,6 +44,9 @@ public class SpaceShip {
 		this.ShipString = a;
 		this.x = x;
 		this.y = y;
+		
+		this.startX = x;
+		this.startY = y;
 		
 		for(int i = 0; i < lifes; i++) {
 			healthBar.add(heart);
@@ -104,7 +109,7 @@ public class SpaceShip {
         
         gc.setFill(Color.WHITE);
         
-        gc.fillText("Score: " + score, 300, 50);
+        gc.fillText("Score: " + score, 450, 50);
 	}
 
 	/**
@@ -138,12 +143,43 @@ public class SpaceShip {
 		}
 		
 		if(currentLifes == 0) {
-			System.exit(0);
+			gameOver = true;
 		}
 	}
 	
 	public void scored(Integer amount) {
 		this.score = this.score + amount;
 	}
+
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+	
+	public Integer getScore() {
+		return score;
+	}
+
+	public void setScore(Integer score) {
+		this.score = score;
+	}
+
+	public void restart() {
+		this.gameOver = false;
+		this.currentLifes = lifes;
+		
+		this.x = this.startX;
+		this.y = this.startY;
+		
+		this.score = 0;
+		
+		for(int i = 0; i < lifes; i++) {
+			healthBar.set(i, heart);
+		}
+	}
+	
 	
 }

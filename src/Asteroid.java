@@ -91,7 +91,7 @@ public class Asteroid {
 	 * @return 
 	 */
 	public Bounds getBounds() {
-		Circle c = new Circle(this.x + width/2, this.y + height/2, 15);
+		Circle c = new Circle(this.x + width/2, this.y + height/2, 10);
 		return c.getBoundsInLocal();
 	}
 	
