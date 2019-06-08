@@ -4,14 +4,11 @@ import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -19,7 +16,7 @@ import javafx.stage.Stage;
 
 public class Starter extends Application implements EventHandler<KeyEvent> {
 
-	SpaceShip ship = new SpaceShip("🚀", 100, 100);
+	SpaceShip ship = new SpaceShip(100, 100);
 	List<Asteroid> asteroid = new ArrayList<>();
 	List<Rocket> rockets = new ArrayList<>();
 	List<Asteroid> exploding = new ArrayList<>();

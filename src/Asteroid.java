@@ -7,7 +7,6 @@ import javafx.scene.shape.Circle;
 
 public class Asteroid {
 
-	private String AsteroidString = "*";
 	private Integer x, y = 0;
 	private int speed;
 	private boolean hitted = false;

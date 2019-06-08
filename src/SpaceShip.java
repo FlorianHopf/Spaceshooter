@@ -9,12 +9,10 @@ import javafx.scene.shape.Rectangle;
 
 public class SpaceShip {
 
-	private Color farbe;
-	private String ShipString;
 	private Integer x, y = 0;
 	private Integer startX, startY = 0;
 	
-	private Integer lifes = 2;
+	private Integer lifes = 5;
 	private Integer currentLifes = lifes;
 	private boolean gameOver = false;
 	
@@ -27,8 +25,6 @@ public class SpaceShip {
 	private Image heart = new Image("imgs/heart.png");
 	private Image emptyHeart = new Image("imgs/emptyHeart.png");
 	
-	private Image damageTaken = new Image("imgs/damageTaken.gif");
-	
 	private Integer score = 0;
 	
 	private double width;
@@ -39,9 +35,8 @@ public class SpaceShip {
 	 * @param x
 	 * @param y
 	 */
-	public SpaceShip(String a, Integer x, Integer y) {
+	public SpaceShip( Integer x, Integer y) {
 		this.shipImage = new Image(path);
-		this.ShipString = a;
 		this.x = x;
 		this.y = y;
 		
