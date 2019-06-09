@@ -1,3 +1,4 @@
+package GameElements;
 import java.util.Random;
 
 import javafx.geometry.Bounds;
@@ -61,7 +62,7 @@ public class Asteroid {
 		
 		this.x = width + rnd.nextInt(width);
 		this.y = rnd.nextInt(height);
-		this.speed = 1 + rnd.nextInt(4);
+		this.speed = 1 + rnd.nextInt(2);
 		
 		hitted = false;
 		exploding = false;

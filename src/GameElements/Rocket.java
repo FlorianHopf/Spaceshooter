@@ -1,3 +1,4 @@
+package GameElements;
 import java.util.Random;
 
 import javafx.geometry.Bounds;
