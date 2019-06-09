@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import GameElements.Asteroid;
+import GameElements.Rocket;
+import GameElements.SpaceShip;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -10,6 +13,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -24,6 +28,8 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 
 	final int WIDTH = 600;
 	final int HEIGHT = 400;
+	
+	Circle c;
 
 	public static void main(String args[]) {
 		launch(args);
@@ -40,12 +46,12 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 		canvas.setOnKeyPressed(this);
 		root.getChildren().add(canvas);
 
-		Image img = new Image("imgs/background.png");	
-		
+		Image img = new Image("imgs/background.png");
+
 		Canvas statisch = new Canvas(WIDTH, HEIGHT);
-		
+
 		root.getChildren().add(statisch);
-		
+
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
 
@@ -55,100 +61,104 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 			asteroid.add(a);
 		}
 
+		
 		// GameLoop
 		new AnimationTimer() {
 
 			@Override
 			public void handle(long currentNanoTime) {
-				if(ship.isGameOver() == false) {
-					
-					statisch.toFront();
-					
-					statisch.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
-					ship.drawStaticAssets(statisch.getGraphicsContext2D());
-					
-					canvas.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
-					canvas.getGraphicsContext2D().drawImage(img, 0, 0, WIDTH, HEIGHT);
-					ship.paint(canvas.getGraphicsContext2D());
-					for (Asteroid ast : asteroid) {
-						ast.paint(canvas.getGraphicsContext2D());
 
-						if (ast.isVisible() == false) {
-							ast.reposition(WIDTH, HEIGHT);
-						}
-					}
+					if (ship.isGameOver() == false) {
 
-					for (Asteroid ast : asteroid) {
-						if (ast.getBounds().intersects(ship.getBounds()) && (ast.hitted() == false)) {
-							ship.damage(canvas.getGraphicsContext2D());
-							ast.hit(true);
-						}
-					}
+						statisch.toFront();
 
-					List<Rocket> zuLoeschen = new ArrayList<>();
+						statisch.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
+						ship.drawStaticAssets(statisch.getGraphicsContext2D());
 
-					for (Rocket rocket : rockets) {
+						canvas.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
+						canvas.getGraphicsContext2D().drawImage(img, 0, 0, WIDTH, HEIGHT);
+						ship.paint(canvas.getGraphicsContext2D());
+						for (Asteroid ast : asteroid) {
+							ast.paint(canvas.getGraphicsContext2D());
 
-						rocket.paint(canvas.getGraphicsContext2D());
-						rocket.move();
-
-						if (rocket.isVisible() == false) {
-							zuLoeschen.add(rocket);
+							if (ast.isVisible() == false) {
+								ast.reposition(WIDTH, HEIGHT);
+							}
 						}
 
 						for (Asteroid ast : asteroid) {
-							if (ast.getBounds().intersects(rocket.getBounds()) && ast.exploding() == false) {
-								ship.scored(20);
-								ast.explodes();
-								exploding.add(new Asteroid(ast.getX() - 125, ast.getY(), ast.getSpeed()));
+							if (ast.getBounds().intersects(ship.getBounds()) && (ast.hitted() == false)) {
+								ship.damage(canvas.getGraphicsContext2D());
+								ast.hit(true);
 							}
 						}
-					}
-					
-					rockets.removeAll(zuLoeschen);
-					for (Asteroid ast : asteroid) {
-						for (Asteroid explode : exploding) {
-							if (ast.exploding()) {
-								if (explode.getBounds().intersects(ast.getBounds()) && explode.getY().equals(ast.getY())) {
-									ast.reposition(WIDTH, HEIGHT);
-									exploded.add(explode);
+
+						List<Rocket> zuLoeschen = new ArrayList<>();
+
+						for (Rocket rocket : rockets) {
+
+							rocket.paint(canvas.getGraphicsContext2D());
+							rocket.move();
+
+							if (rocket.isVisible() == false) {
+								zuLoeschen.add(rocket);
+							}
+
+							for (Asteroid ast : asteroid) {
+								if (ast.getBounds().intersects(rocket.getBounds()) && ast.exploding() == false) {
+									ship.scored(20);
+									ast.explodes();
+									exploding.add(new Asteroid(ast.getX() - 125, ast.getY(), ast.getSpeed()));
 								}
 							}
 						}
+
+						rockets.removeAll(zuLoeschen);
+						for (Asteroid ast : asteroid) {
+							for (Asteroid explode : exploding) {
+								if (ast.exploding()) {
+									if (explode.getBounds().intersects(ast.getBounds())
+											&& explode.getY().equals(ast.getY())) {
+										ast.reposition(WIDTH, HEIGHT);
+										exploded.add(explode);
+									}
+								}
+							}
+						}
+						exploding.removeAll(exploded);
+
+					} else {
+						int c = rockets.size();
+
+						for (int i = c - 1; i >= 0; i--) {
+							rockets.remove(i);
+						}
+
+						canvas.toFront();
+
+						canvas.getGraphicsContext2D().setFill(Color.BLACK);
+						canvas.getGraphicsContext2D().fillRect(0, 0, WIDTH, HEIGHT);
+
+						canvas.getGraphicsContext2D().setFill(Color.WHITE);
+
+						canvas.getGraphicsContext2D().setTextAlign(TextAlignment.CENTER);
+
+						String end = "GAME OVER";
+
+						canvas.getGraphicsContext2D().setFont(new Font("Arial", 50));
+
+						canvas.getGraphicsContext2D().fillText(end, WIDTH / 2, HEIGHT / 2);
+
+						String restart = "Press Enter to Restart";
+
+						canvas.getGraphicsContext2D().setFont(new Font("Arial", 20));
+
+						canvas.getGraphicsContext2D().fillText(restart, WIDTH / 2, HEIGHT / 2 + 50);
+
+						canvas.getGraphicsContext2D().fillText("Current Score: " + ship.getScore(), WIDTH / 2,
+								HEIGHT / 2 + 150);
 					}
-					exploding.removeAll(exploded);
-				
-				} else {
-					int c = rockets.size();
-					
-					for(int i = c - 1; i >= 0; i--) {
-						rockets.remove(i);
-					}
-					
-					canvas.toFront();
-					
-					canvas.getGraphicsContext2D().setFill(Color.BLACK);
-					canvas.getGraphicsContext2D().fillRect(0, 0, WIDTH, HEIGHT);
-					
-					canvas.getGraphicsContext2D().setFill(Color.WHITE);
-					
-					canvas.getGraphicsContext2D().setTextAlign(TextAlignment.CENTER);
-					
-					String end = "GAME OVER";
-					
-					canvas.getGraphicsContext2D().setFont(new Font("Arial", 50));
-					
-					canvas.getGraphicsContext2D().fillText(end, WIDTH / 2, HEIGHT/ 2);
-					
-					String restart = "Press Enter to Restart";
-					
-					canvas.getGraphicsContext2D().setFont(new Font("Arial", 20));
-					
-					canvas.getGraphicsContext2D().fillText(restart, WIDTH / 2, HEIGHT/ 2 + 50);
-					
-					canvas.getGraphicsContext2D().fillText("Current Score: " + ship.getScore() , WIDTH/2, HEIGHT/2 + 150);
 				}
-			}
 		}.start();
 
 	}
@@ -158,7 +168,6 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 	 * 
 	 * @param evnt
 	 */
-	@Override
 	public void handle(KeyEvent evnt) {
 
 		int accellerator = 1;
@@ -184,12 +193,13 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 			Rocket r = ship.fire();
 			rockets.add(r);
 			break;
-		case "Enter": if(ship.isGameOver()) {
-			ship.restart();
-			for(Asteroid ast : asteroid) {
-				ast.reposition(WIDTH, HEIGHT);
+		case "Enter":
+			if (ship.isGameOver()) {
+				ship.restart();
+				for (Asteroid ast : asteroid) {
+					ast.reposition(WIDTH, HEIGHT);
+				}
 			}
-		}
 		}
 	}
 
