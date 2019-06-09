@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 public class SpaceShip {
 
@@ -97,14 +98,17 @@ public class SpaceShip {
 		
 		width = shipImage.getWidth();
         height = shipImage.getHeight();
-        
-        for(int i = 0; i < lifes; i++) {
-        	gc.drawImage(healthBar.get(i), 550 - 30*i, 350);
-        }
-        
-        gc.setFill(Color.WHITE);
-        
-        gc.fillText("Score: " + score, 450, 50);
+	}
+	
+	public void drawStaticAssets(GraphicsContext gc) {
+		 for(int i = 0; i < lifes; i++) {
+	        	gc.drawImage(healthBar.get(i), 550 - 30*i, 350);
+	        }
+	        
+	        gc.setFill(Color.WHITE);
+	        gc.setFont(new Font("Arial", 20));
+	        
+	        gc.fillText("Score: " + score, 450, 50);
 	}
 
 	/**

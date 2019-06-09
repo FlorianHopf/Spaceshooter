@@ -24,7 +24,6 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 
 	final int WIDTH = 600;
 	final int HEIGHT = 400;
-	final int hitRate = 30 / 2;
 
 	public static void main(String args[]) {
 		launch(args);
@@ -43,6 +42,10 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 
 		Image img = new Image("imgs/background.png");	
 		
+		Canvas statisch = new Canvas(WIDTH, HEIGHT);
+		
+		root.getChildren().add(statisch);
+		
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
 
@@ -58,6 +61,12 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 			@Override
 			public void handle(long currentNanoTime) {
 				if(ship.isGameOver() == false) {
+					
+					statisch.toFront();
+					
+					statisch.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
+					ship.drawStaticAssets(statisch.getGraphicsContext2D());
+					
 					canvas.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
 					canvas.getGraphicsContext2D().drawImage(img, 0, 0, WIDTH, HEIGHT);
 					ship.paint(canvas.getGraphicsContext2D());
@@ -110,6 +119,14 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 					exploding.removeAll(exploded);
 				
 				} else {
+					int c = rockets.size();
+					
+					for(int i = c - 1; i >= 0; i--) {
+						rockets.remove(i);
+					}
+					
+					canvas.toFront();
+					
 					canvas.getGraphicsContext2D().setFill(Color.BLACK);
 					canvas.getGraphicsContext2D().fillRect(0, 0, WIDTH, HEIGHT);
 					
