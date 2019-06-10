@@ -37,6 +37,8 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 	
 	private int difficulty = 2;
 	
+	private boolean createAsteroids = false;
+	
 	Circle c;
 
 	public static void main(String args[]) {
@@ -72,6 +74,12 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
+		
+		for (int i = 0; i < 15 * difficulty; i++) {
+			Asteroid a = new Asteroid(0, 0, 0);
+			a.reposition(WIDTH, HEIGHT);
+			asteroid.add(a);
+		}
 
 		// GameLoop
 		new AnimationTimer() {
@@ -80,6 +88,8 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 			public void handle(long currentNanoTime) {
 				if (mainMenu) {
 					if(options == true) {
+						
+						
 						optionsView.toFront();
 						
 						optionsView.getGraphicsContext2D().setFill(Color.BLACK);
@@ -122,6 +132,7 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 
 						float hardWidth = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().computeStringWidth(hard,
 								optionsView.getGraphicsContext2D().getFont());
+						
 						float hardHeight = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader()
 								.getFontMetrics(optionsView.getGraphicsContext2D().getFont()).getLineHeight();
 
@@ -138,33 +149,37 @@ public class Starter extends Application implements EventHandler<KeyEvent> {
 
 						Rectangle hardButton = new Rectangle(WIDTH / 2 - hardWidth / 2, HEIGHT / 2 - hardHeight / 2 + 75,
 								hardWidth, hardHeight);
-						
+												
 						//Mouse Handler
 						optionsView.addEventHandler(MouseEvent.MOUSE_CLICKED, 
 							       new EventHandler<MouseEvent>() {
 							public void handle(MouseEvent e) {
-								Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
 								
+								Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
 								if (easyButton.getBoundsInLocal().intersects(r.getBoundsInLocal())) {
 									difficulty = 1;
-									options = false;	
+									options = false;
+									createAsteroids = true;
 								}
 
 								if (intermediateButton.getBoundsInLocal().intersects(r.getBoundsInLocal())) {
 									difficulty = 2;
 									options = false;
+									createAsteroids = true;
 								}
 								
 								if (hardButton.getBoundsInLocal().intersects(r.getBoundsInLocal())) {
 									difficulty = 3;
 									options = false;
+									createAsteroids = true;
 								}	
 								
-								asteroid.clear();
-								for (int i = 0; i < 15 * difficulty; i++) {
-									Asteroid a = new Asteroid(0, 0, 0);
-									a.reposition(WIDTH, HEIGHT);
-									asteroid.add(a);
+								if(createAsteroids) {
+									for (int i = 0; i < 15 * difficulty; i++) {
+										Asteroid a = new Asteroid(0, 0, 0);
+										a.reposition(WIDTH, HEIGHT);
+										asteroid.add(a);
+									}
 								}
 								
 							}
